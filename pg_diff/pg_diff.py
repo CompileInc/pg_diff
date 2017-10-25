@@ -109,14 +109,9 @@ class DBDiffBase(object):
         src_table_data = self.table_data
         target_table_data = target.table_data
 
-        if verbose:
-            print("Source: ", src_table_data)
-            print('')
-            print("Target: ", target_table_data)
-
         diff_result = DeepDiff(src_table_data, target_table_data)
 
-        return diff_result
+        return (src_table_data, target_table_data, diff_result)
 
 
 class DBTableRowCountDiff(DBDiffBase):
@@ -496,11 +491,14 @@ def diff(src_dsn, target_dsn, diff_type, verbose=False):
 
 
 def _diff(src_dsn, target_dsn, diff_type, verbose=False):
-    diff_result = diff(src_dsn, target_dsn, diff_type, verbose)
+    src_table_data, target_table_data, diff_result = diff(src_dsn, target_dsn, diff_type, verbose)
 
     print('Diff Result:\n')
 
     if diff_result:
+        if verbose:
+            pprint({'Source': src_table_data}, indent=2)
+            pprint({'Target': src_table_data}, indent=2)
         pprint(diff_result, indent=2)
     else:
         print('They are the same.')
