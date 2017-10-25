@@ -492,6 +492,12 @@ def diff(src_dsn, target_dsn, diff_type, verbose=False):
 
     diff_result = src_db.diff(target_db, verbose)
 
+    return diff_result
+
+
+def _diff(src_dsn, target_dsn, diff_type, verbose=False):
+    diff_result = diff(src_dsn, target_dsn, diff_type, verbose)
+
     print('Diff Result:\n')
 
     if diff_result:
@@ -547,7 +553,7 @@ def main():
         'verbose': args['--verbose'],
     }
 
-    diff(**kwargs)
+    _diff(**kwargs)
 
 
 if __name__ == '__main__':
